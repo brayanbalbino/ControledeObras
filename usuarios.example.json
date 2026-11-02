@@ -1,0 +1,19 @@
+{
+  "admin": {
+    "nome": "Administrador",
+    "papel": "admin",
+    "senha": "Admin2026"
+  },
+  "silva": {
+    "nome": "Família Silva",
+    "papel": "cliente",
+    "senha": "Cliente1@26",
+    "obras": ["OBRA-01"]
+  },
+  "santos": {
+    "nome": "Comercial Santos",
+    "papel": "cliente",
+    "senha": "Cliente2@26",
+    "obras": ["OBRA-02"]
+  }
+}
