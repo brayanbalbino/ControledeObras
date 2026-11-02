@@ -53,7 +53,7 @@ O app grava na coleção `lancamentos`, e o ID do documento é o próprio ID_Lan
 ## 2) Vercel (publicar o site)
 
 1. Suba a pasta para um repositório no GitHub.
-2. Em https://vercel.com → **Add New → Project** → importe o repositório (Framework Preset: **Other**).
+2. Em https://vercel.com → **Add New → Project** → importe o repositório (a Vercel detecta o preset **Python** sozinha; deixe como está).
 3. Em **Settings → Environment Variables**, cadastre:
    - `FIREBASE_CREDENTIALS` = conteúdo inteiro do JSON da chave
    - `USUARIOS` = JSON dos usuários, em uma linha (veja `.env.example`)
@@ -61,6 +61,8 @@ O app grava na coleção `lancamentos`, e o ID do documento é o próprio ID_Lan
 4. **Deploy.** Pela linha de comando: `npm i -g vercel`, depois `vercel` (teste) e `vercel --prod`.
 
 Sem `FIREBASE_CREDENTIALS`, o site na Vercel entra em *modo demonstração*: grava em disco temporário e **os dados somem**. A barra lateral do administrador mostra qual banco está em uso.
+
+Se o site não abrir, acesse `/saude` no endereço do site: mostra se as variáveis foram lidas e qual banco está em uso.
 
 Para adicionar ou trocar um cliente depois, edite `USUARIOS` no painel da Vercel e faça um novo deploy.
 
@@ -71,7 +73,7 @@ Para adicionar ou trocar um cliente depois, edite `USUARIOS` no painel da Vercel
 | `controle_obras.py` | App completo (back-end, login e front) |
 | `iniciar.bat` | Executa tudo com dois cliques (Windows) |
 | `usuarios.example.json` | Modelo de usuários (admin e clientes) |
-| `api/index.py`, `vercel.json` | Ponte para a Vercel |
+| `index.py` | Ponto de entrada da Vercel (ela detecta sozinha, sem `vercel.json`) |
 | `requirements.txt` | Dependências na Vercel |
 | `firebase.json`, `firestore.rules`, `firestore.indexes.json` | Configuração do Firestore |
 | `.env.example` | Modelo das variáveis de ambiente |

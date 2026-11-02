@@ -752,7 +752,7 @@ LOGIN_HTML = """<!DOCTYPE html>
 
 @server.before_request
 def _proteger():
-    if request.path in ("/login", "/logout"):
+    if request.path in ("/login", "/logout", "/saude"):
         return None
     if not USUARIOS and NA_VERCEL:
         return Response("Configure a variável de ambiente USUARIOS (veja o LEIA-ME).", 503)
@@ -777,6 +777,19 @@ def login():
         time.sleep(0.8)  # atrasa tentativas de adivinhar a senha
         erro = '<p class="login__erro">Usuário ou senha incorretos.</p>'
     return Response(LOGIN_HTML.replace("_CSS_", CSS_ESTILO).replace("_ERRO_", erro), mimetype="text/html")
+
+
+@server.route("/saude")
+def saude():
+    """Diagnóstico público e sem dados sensíveis: abra /saude para ver como o servidor está."""
+    return {
+        "ok": True,
+        "caminho_visto_pelo_servidor": request.path,
+        "na_vercel": NA_VERCEL,
+        "usuarios_carregados": len(USUARIOS),
+        "banco": STORE.nome,
+        "python": sys.version.split()[0],
+    }
 
 
 @server.route("/logout")
