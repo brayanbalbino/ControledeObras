@@ -239,6 +239,11 @@ STORE = criar_store()
 _cache = {"t": 0.0, "dados": None}
 
 
+def erro_curto(e, limite=280):
+    texto = " ".join(str(e).split())
+    return (texto[:limite] + "…") if len(texto) > limite else texto
+
+
 def invalidar_cache():
     _cache["dados"] = None
 
@@ -1080,11 +1085,17 @@ def atualizar(_add, _del, id_lanc, id_obra, item, qtd_p, plan, qtd_r, real, sel,
     if ctx.triggered_id == "btn_del":
         if not sel:
             return no_update, toast("Selecione ao menos um lançamento para excluir.", "err"), *LIMPAR_CAMPOS
-        STORE.excluir([dados[i]["id"] for i in sel])
+        try:
+            STORE.excluir([dados[i]["id"] for i in sel])
+        except Exception as e:  # noqa: BLE001
+            return no_update, toast(f"Não foi possível excluir: {erro_curto(e)}", "err"), *LIMPAR_CAMPOS
         invalidar_cache()
         return cont, toast(f"{len(sel)} lançamento(s) excluído(s)."), *LIMPAR_CAMPOS
 
-    erro = validar_lancamento(id_lanc, id_obra, item, qtd_p, plan, qtd_r, real)
+    try:
+        erro = validar_lancamento(id_lanc, id_obra, item, qtd_p, plan, qtd_r, real)
+    except Exception as e:  # noqa: BLE001  (ex.: Firestore não criado ou sem permissão)
+        return no_update, toast(f"Não consegui acessar o banco de dados: {erro_curto(e)}", "err"), *LIMPAR_CAMPOS
     if erro:
         return no_update, toast(erro, "err"), *LIMPAR_CAMPOS
     try:
@@ -1092,7 +1103,7 @@ def atualizar(_add, _del, id_lanc, id_obra, item, qtd_p, plan, qtd_r, real, sel,
     except Duplicado:
         return no_update, toast("ID_Lancamento duplicado. Use um ID diferente.", "err"), *LIMPAR_CAMPOS
     except Exception as e:  # noqa: BLE001  (ex.: Firebase fora do ar)
-        return no_update, toast(f"Não foi possível salvar: {e}", "err"), *LIMPAR_CAMPOS
+        return no_update, toast(f"Não foi possível salvar: {erro_curto(e)}", "err"), *LIMPAR_CAMPOS
     invalidar_cache()
     return cont, toast("Lançamento inserido com sucesso."), None, None, None, None, None, None
 
@@ -1130,15 +1141,18 @@ def previa(qp, pl, qr, rl):
     Input("f_busca", "value"),
 )
 def renderizar(_refresh, obra, busca):
+    falha = None
     try:
         base = visivel(carregar_tabela(), usuario_atual())
     except Exception as e:  # noqa: BLE001
         print("Erro ao ler os dados:", e)
-        base = []
+        base, falha = [], erro_curto(e)
     opcoes = [{"label": o, "value": o} for o in sorted({d["ID_Obra"] for d in base})]
     dados = filtrar(base, obra, busca)
     return (
-        montar_kpis(dados), montar_resumo(dados), fig_gauge(dados), fig_obras(dados),
+        montar_kpis(dados),
+        html.Div(f"Erro ao ler o banco de dados: {falha}", className="hero__sub") if falha else montar_resumo(dados),
+        fig_gauge(dados), fig_obras(dados),
         fig_donut(dados), fig_itens(dados), dados, opcoes, [],
     )
 
