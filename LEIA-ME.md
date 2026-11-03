@@ -1,3 +1,5 @@
+Link on-line: https://controledeobras-chi.vercel.app/login
+
 # Controle de Obras — Planejado x Realizado
 
 Dashboard em Dash com login (administrador e cliente) e dados em SQLite (local) ou Firebase Firestore (nuvem).
