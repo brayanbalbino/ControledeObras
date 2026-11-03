@@ -73,6 +73,7 @@ Para adicionar ou trocar um cliente depois, edite `USUARIOS` no painel da Vercel
 | `controle_obras.py` | App completo (back-end, login e front) |
 | `iniciar.bat` | Executa tudo com dois cliques (Windows) |
 | `usuarios.example.json` | Modelo de usuários (admin e clientes) |
+| `DOCUMENTACAO_DO_CODIGO.md` | Explica o que foi feito e cada função (front e back) |
 | `index.py` | Ponto de entrada da Vercel (ela detecta sozinha, sem `vercel.json`) |
 | `requirements.txt` | Dependências na Vercel |
 | `firebase.json`, `firestore.rules`, `firestore.indexes.json` | Configuração do Firestore |
