@@ -2,6 +2,10 @@
 
 Dashboard em Dash com login (administrador e cliente) e dados em SQLite (local) ou Firebase Firestore (nuvem).
 
+# Grupo - Usuário GitHub:
+   Brayan Balbino - brayanbalbino
+   Arthur Charleston - arthurcharleston
+
 ## Rodar no seu computador
 
 **Windows, jeito mais fácil:** dois cliques em `iniciar.bat`. Ele cria o ambiente virtual, instala o que falta e abre o navegador.
